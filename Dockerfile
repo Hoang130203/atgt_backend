@@ -1,12 +1,12 @@
 # Build stage
-FROM docker.io/library/maven:3.8.4-openjdk-17 AS builder
+FROM maven:3.8.3-openjdk-17 AS build
 WORKDIR /app
 COPY . /app/
 RUN mvn clean package
 
 # Package stage
-FROM docker.io/library/adoptopenjdk/openjdk17:alpine
+FROM openjdk17:alpine
 WORKDIR /app
-COPY --from=builder /app/target/*.jar /app/app.jar
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
