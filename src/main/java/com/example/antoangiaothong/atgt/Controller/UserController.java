@@ -1,7 +1,6 @@
 package com.example.antoangiaothong.atgt.Controller;
 
 import com.example.antoangiaothong.atgt.Entity.Post;
-import com.example.antoangiaothong.atgt.Entity.Role;
 import com.example.antoangiaothong.atgt.Entity.User;
 import com.example.antoangiaothong.atgt.Entity.Video;
 import com.example.antoangiaothong.atgt.Repository.RoleRepository;
@@ -10,10 +9,8 @@ import com.example.antoangiaothong.atgt.Service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -134,7 +131,7 @@ public class UserController {
 
     @GetMapping("/allpost")
     public List<Post> allPost(){
-        return userService.getAllPosts().reversed();
+        return userService.getAllPosts();
     }
 
 }

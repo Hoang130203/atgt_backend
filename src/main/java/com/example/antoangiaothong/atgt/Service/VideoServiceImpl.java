@@ -50,7 +50,7 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public Collection<Video> getAll() {
-        return videoRepository.findAll().reversed();
+        return videoRepository.findAll();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public Collection<Image> getAllImage() {
-        return imageRepository.findAll().reversed();
+        return imageRepository.findAll();
     }
 
     @Override
