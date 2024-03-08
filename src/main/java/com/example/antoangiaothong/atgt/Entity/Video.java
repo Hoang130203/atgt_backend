@@ -29,7 +29,6 @@ public class Video {
     @Column(name = "time")
     private Timestamp time;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;

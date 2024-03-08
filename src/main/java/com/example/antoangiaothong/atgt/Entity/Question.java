@@ -1,5 +1,6 @@
 package com.example.antoangiaothong.atgt.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,22 @@ public class Question {
     @Column(name="answer",columnDefinition = "nvarchar(max)")
     private String answer;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "exam")
     private Exam exam;
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", choice1='" + choice1 + '\'' +
+                ", choice2='" + choice2 + '\'' +
+                ", choice3='" + choice3 + '\'' +
+                ", choice4='" + choice4 + '\'' +
+                ", answer='" + answer + '\'' +
+                ", exam=" + exam +
+                '}';
+    }
 }

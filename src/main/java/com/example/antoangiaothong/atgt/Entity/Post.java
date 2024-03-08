@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -33,8 +36,8 @@ public class Post {
     @Column(name = "time")
     private Timestamp time;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JoinColumn(name = "owner_id")
     private User user;
 

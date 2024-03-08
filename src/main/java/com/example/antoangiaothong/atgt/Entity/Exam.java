@@ -19,11 +19,11 @@ public class Exam {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name",columnDefinition = "nvarchar(2000)")
     private String name;
 
     @Column(name = "time")
-    private String time;
+    private int time;
 
     @Column(name = "max_times")
     private int maxTimes;
@@ -39,7 +39,7 @@ public class Exam {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> results;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "exam")
     private Collection<Question> questions;
 }
