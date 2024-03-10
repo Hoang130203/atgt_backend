@@ -19,7 +19,17 @@ public class PostController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPost(@PathVariable int id){
-        return ResponseEntity.ok(postService.getPostById(id)) ;
+    public ResponseEntity<?> getPost(@PathVariable int id,@RequestParam String userId){
+        return ResponseEntity.ok(postService.getPostById(id,userId)) ;
+    }
+
+    @PostMapping("/react")
+    public ResponseEntity<?> insertReact(@RequestParam int postId,@RequestParam String userId,@RequestParam String react){
+        return ResponseEntity.ok(postService.insertReact(postId,userId,react));
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<?> insertComment(@RequestParam int postId,@RequestParam String userId,@RequestParam String content){
+        return ResponseEntity.ok(postService.insertComment(postId,userId,content));
     }
 }

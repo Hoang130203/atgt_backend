@@ -1,6 +1,7 @@
 package com.example.antoangiaothong.atgt.Controller;
 
 import com.example.antoangiaothong.atgt.Entity.Exam;
+import com.example.antoangiaothong.atgt.Entity.Result;
 import com.example.antoangiaothong.atgt.Service.ExamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,21 @@ public class ExamController {
     @GetMapping("/getExamById")
     public ResponseEntity<?> getExamById(@RequestParam int id){
         return ResponseEntity.ok(examService.getExamById(id));
+    }
+
+    @PostMapping("/result")
+    public ResponseEntity<?> postResult(@RequestBody Result result){
+//        System.out.println("abc");
+        Result result1=examService.postResult(result);
+        if(result1!=null){
+            return ResponseEntity.ok(result1);
+        }else{
+            return ResponseEntity.badRequest().body("error");
+        }
+    }
+
+    @GetMapping("/rank")
+    public ResponseEntity<?> getRank(@RequestParam int examId){
+        return ResponseEntity.ok(examService.getRank(examId));
     }
 }

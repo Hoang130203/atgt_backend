@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.sql.Time;
 
 @Embeddable
+@Getter @Setter
 class ReactId implements Serializable {
     @Column(name = "post_id")
     private int postId;
@@ -32,4 +33,11 @@ public class ReactPost {
 
     @Column(name = "react")
     private String react;
+
+    public void setId(int postId, String userId) {
+        ReactId reactId= new ReactId();
+        reactId.setPostId(postId);
+        reactId.setUserId(userId);
+        this.setId(reactId);
+    }
 }

@@ -1,12 +1,16 @@
 package com.example.antoangiaothong.atgt.Service;
 
+import com.example.antoangiaothong.atgt.Dto.ResultDTO;
 import com.example.antoangiaothong.atgt.Entity.Exam;
 import com.example.antoangiaothong.atgt.Entity.Question;
+import com.example.antoangiaothong.atgt.Entity.Result;
 import com.example.antoangiaothong.atgt.Entity.User;
 import com.example.antoangiaothong.atgt.Repository.ExamRepository;
 import com.example.antoangiaothong.atgt.Repository.QuestionRepository;
+import com.example.antoangiaothong.atgt.Repository.ResultRepository;
 import com.example.antoangiaothong.atgt.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +23,13 @@ public class ExamServiceImpl implements ExamService{
     private final ExamRepository examRepository;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private final ResultRepository resultRepository;
     @Autowired
-    public ExamServiceImpl(ExamRepository examRepository, UserRepository userRepository, QuestionRepository questionRepository) {
+    public ExamServiceImpl(ExamRepository examRepository, UserRepository userRepository, QuestionRepository questionRepository, ResultRepository resultRepository) {
         this.examRepository = examRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
+        this.resultRepository = resultRepository;
     }
 
 
@@ -83,5 +89,61 @@ public class ExamServiceImpl implements ExamService{
             e=exam.get();
         }
         return e;
+    }
+
+    @Override
+    @Transactional
+    public Result postResult(Result result) {
+        User user= userRepository.findByUserId(result.getResultId().getUserId());
+        Optional<Exam> exam= examRepository.findById(result.getResultId().getExamId());
+        if(user!=null &&exam.isPresent()){
+            Optional<Result> r= resultRepository.findById(result.getResultId());
+            if(r.isPresent()){
+//                System.out.println("finded");
+                Result oldResult = r.get();
+                Result result1 = new Result();
+                result1.setResultId(result.getResultId());
+                if(oldResult.getNumberCorrect()<result.getNumberCorrect()){
+                    result1.setNumberCorrect(result.getNumberCorrect());
+                    result1.setTime(result.getTime());
+                }else if(oldResult.getNumberCorrect()==result.getNumberCorrect()){
+                    result1.setNumberCorrect(result.getNumberCorrect());
+                    result1.setTime((oldResult.getTime()<result.getTime())?oldResult.getTime():result.getTime());
+                }else{
+                    result1.setNumberCorrect(oldResult.getNumberCorrect());
+                    result1.setTime(oldResult.getTime());
+                }
+                result1.setNumberOfTimes(oldResult.getNumberOfTimes()+1);
+                result1.setTotalQuestion(oldResult.getTotalQuestion());
+                resultRepository.save(result1);
+                return result1;
+            }else{
+                Result result1= new Result();
+                result1.setResultId(result.getResultId());
+                result1.setNumberCorrect(result.getNumberCorrect());
+                result1.setTime(result.getTime());
+                result1.setTotalQuestion(result.getTotalQuestion());
+                result1.setNumberOfTimes(1);
+                resultRepository.save(result1);
+                return result1;
+            }
+
+        }
+        return null;
+    }
+
+    @Override
+    public Collection<ResultDTO> getRank(int examId) {
+        Collection<Result> rank= examRepository.getRankOfExam(examId);
+        Collection<ResultDTO> ranks= new ArrayList<>();
+        for (Result r:rank
+             ) {
+            User u= userRepository.findByUserId(r.getResultId().getUserId());
+
+            System.out.println(u);
+            ranks.add(new ResultDTO(r,u.getName(),u.getAvatar()));
+        }
+        System.out.println(rank.size());
+        return ranks;
     }
 }

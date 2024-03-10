@@ -45,9 +45,11 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST,"api/videos/postImage").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET,"/api/videos/**").permitAll()
                     .requestMatchers(HttpMethod.GET,"/videos").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/api/exams/result").hasRole("USER")
                     .requestMatchers(HttpMethod.POST,"/api/exams/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET,"/api/exams/**").hasRole("USER")
                     .requestMatchers(HttpMethod.GET,"/api/exams/**").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST,"/api/posts/**").hasRole("USER")
                     .requestMatchers("/posts/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );

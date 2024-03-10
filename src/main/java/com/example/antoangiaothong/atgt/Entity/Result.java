@@ -7,15 +7,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Embeddable
-class ResultId implements Serializable{
-    @Column(name = "user_id")
-    private String userId;
-
-    @Column(name = "exam_id")
-    private int examId;
-}
-
 @Entity
 @Getter@Setter
 @NoArgsConstructor

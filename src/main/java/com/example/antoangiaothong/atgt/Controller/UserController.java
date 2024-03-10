@@ -9,6 +9,7 @@ import com.example.antoangiaothong.atgt.Service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -74,6 +75,7 @@ public class UserController {
                 newUser.setHasProvider(true);
                 newUser.setEnable(true);
                 newUser.setAvatar(hasProvider);
+                newUser.setType(2);
                 userService.insertUser(newUser);
                 return  ResponseEntity.ok(newUser);
             }
@@ -102,6 +104,7 @@ public class UserController {
     public ResponseEntity<?>signup(@RequestBody User user){
         User newuser=userService.findAccountToSignUp(user.getAccount());
         if(newuser==null){
+            user.setType(2);
             userService.insertUser(user);
             return ResponseEntity.ok(user);
         }else{
@@ -134,4 +137,37 @@ public class UserController {
         return userService.getAllPosts();
     }
 
+
+    @GetMapping("/info")
+    public ResponseEntity<User> getInfo(@RequestParam String userId){
+        return ResponseEntity.ok(userService.findById(userId));
+    }
+
+    @PutMapping("/info")
+    @Transactional
+    public ResponseEntity<?> putInfo(@RequestParam String userId,@RequestBody User u){
+        User user= userService.findById(userId);
+        if(user!=null){
+            user.setAvatar(u.getAvatar());
+            user.setPassword(u.getPassword());
+            user.setName(u.getName());
+            user.setSchool(u.getSchool());
+            user.setOfClass(u.getOfClass());
+            user.setGender(u.getGender());
+            user.setEmail(u.getEmail());
+
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.badRequest().body("error");
+    }
+    @PutMapping("/avatar")
+    @Transactional
+    public ResponseEntity<?> putAvatar(@RequestParam String userId,@RequestParam String avatar){
+        User user= userService.findById(userId);
+        if(user!=null){
+            user.setAvatar(avatar);
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.badRequest().body("error");
+    }
 }
