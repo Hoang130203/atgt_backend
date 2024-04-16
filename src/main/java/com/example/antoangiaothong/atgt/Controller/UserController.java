@@ -1,5 +1,6 @@
 package com.example.antoangiaothong.atgt.Controller;
 
+import com.example.antoangiaothong.atgt.Dto.UserRegister;
 import com.example.antoangiaothong.atgt.Entity.Post;
 import com.example.antoangiaothong.atgt.Entity.User;
 import com.example.antoangiaothong.atgt.Entity.Video;
@@ -101,10 +102,17 @@ public class UserController {
         return randomString;
     }
     @PostMapping("/signup")
-    public ResponseEntity<?>signup(@RequestBody User user){
-        User newuser=userService.findAccountToSignUp(user.getAccount());
+    public ResponseEntity<?>signup(@RequestBody UserRegister userRegister){
+        User newuser=userService.findAccountToSignUp(userRegister.getAccount());
         if(newuser==null){
+            User user= new User();
+            user.setAccount(userRegister.getAccount());
+            user.setPassword(userRegister.getPassword());
+            user.setName(userRegister.getName());
+            user.setHasProvider(false);
+            user.setEnable(true);
             user.setType(2);
+            user.setId(randomString());
             userService.insertUser(user);
             return ResponseEntity.ok(user);
         }else{
